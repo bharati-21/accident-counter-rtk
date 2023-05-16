@@ -8,14 +8,14 @@ const initalState: CounterState = {
   count: 0
 };
 
-type CounterAction =
-  | {
-      type: "counter/increment" | "counter/decrement";
-      payload: number;
-    }
-  | {
-      type: "counter/reset";
-    };
+// type CounterAction =
+//   | {
+//       type: "counter/increment" | "counter/decrement";
+//       payload: number;
+//     }
+//   | {
+//       type: "counter/reset";
+//     };
 
 const increment = createAction("counter/increment", (amount: number) => {
   return {
@@ -27,6 +27,11 @@ const decrement = createAction("counter/decrement", (amount: number) => ({
 }));
 
 const reset = createAction("counter/reset");
+
+type CounterAction =
+  | ReturnType<typeof increment>
+  | ReturnType<typeof decrement>
+  | ReturnType<typeof reset>;
 
 export const counterReducer = (state = initalState, action: CounterAction) => {
   switch (action.type) {
