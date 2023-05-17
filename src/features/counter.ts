@@ -1,4 +1,4 @@
-import { createAction } from "@reduxjs/toolkit";
+import { createAction, createReducer } from "@reduxjs/toolkit";
 
 type CounterState = {
   count: number;
@@ -17,21 +17,37 @@ const initalState: CounterState = {
 //       type: "counter/reset";
 //     };
 
-const increment = createAction("counter/increment", (amount: number) => {
+export const increment = createAction("counter/increment", (amount: number) => {
   return {
     payload: amount
   };
 });
-const decrement = createAction("counter/decrement", (amount: number) => ({
-  payload: amount
-}));
+export const decrement = createAction(
+  "counter/decrement",
+  (amount: number) => ({
+    payload: amount
+  })
+);
 
-const reset = createAction("counter/reset");
+export const reset = createAction("counter/reset");
 
 type CounterAction =
   | ReturnType<typeof increment>
   | ReturnType<typeof decrement>
   | ReturnType<typeof reset>;
+
+export const counterReducer2 = createReducer(initalState, (builder) => {
+  builder
+    .addCase(increment, (state, action) => {
+      state.count += action.payload;
+    })
+    .addCase(decrement, (state, action) => {
+      state.count -= action.payload;
+    })
+    .addCase(reset, (state) => {
+      state.count = 0;
+    });
+});
 
 export const counterReducer = (state = initalState, action: CounterAction) => {
   switch (action.type) {
